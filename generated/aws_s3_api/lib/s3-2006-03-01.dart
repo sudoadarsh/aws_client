@@ -4780,10 +4780,12 @@ class S3 {
         'response-expires': [_s.rfc822ToJson(responseExpires).toString()],
       if (versionId != null) 'versionId': [versionId],
     };
+    // Encode the object key.
+    final String encodedKey =
+        Uri.encodeQueryComponent(component).replaceAll("+", "%20");
     final $result = await _protocol.sendRaw(
       method: 'GET',
-      requestUri:
-          '/${Uri.encodeComponent(bucket)}/${key.split('/').map(Uri.encodeComponent).join('/')}',
+      requestUri: '/${Uri.encodeComponent(bucket)}/$encodedKey',
       queryParams: $query,
       headers: headers,
       exceptionFnMap: _exceptionFns,
